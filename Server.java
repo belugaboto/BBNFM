@@ -31,15 +31,15 @@ public class Server {
             server = new ServerSocket(port);
 
             while(true){
-                System.out.println("Waiting for the client request");
+                System.out.println("\nWaiting for the Player");
                 Socket socket = server.accept();
                 ObjectInputStream ois = new ObjectInputStream(socket.getInputStream());
                 String message = (String) ois.readObject();
-                System.out.println("Message Received: " + message);
+                System.out.println(message);
                 Random rand = new Random();
                 int newPort = rand.nextInt(9000)+1000;
-                MultiThreadRespond mr = new MultiThreadRespond(newPort);
-                thread = new Thread(mr);
+                Dictionary d = new Dictionary(newPort);
+                thread = new Thread(d);
                 thread.start();
                 ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream());
                 oos.writeObject(""+newPort);

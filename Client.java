@@ -8,7 +8,7 @@ import java.net.Socket;
 import java.util.Scanner;
 public class Client {
 
-    private static int MAX_TRY = 7;
+    private static int MAX_LIFE = 7;
     private static int INIT_PORT = 8888;
     private static String HOST = "127.0.0.1";
 
@@ -17,7 +17,7 @@ public class Client {
     private static ObjectOutputStream socketOutput = null;
     private static ObjectInputStream socketInput = null;
 
-    private static String hidden_word = "";
+    private static String hidden_letter = "";
     private static String missed = "";
 
     private static int isWin = 0;
@@ -31,7 +31,7 @@ public class Client {
             String[] res = input.split("@");  // split response with @ and store in String arrays
 
             // assign each status to global variable
-            hidden_word = res[0];
+            hidden_letter = res[0];
             miss_chance = Integer.parseInt(res[1]);
             missed = res[2];
             isWin = Integer.parseInt(res[3]);
@@ -68,8 +68,8 @@ public class Client {
 
     public static void main( String[] args ) {
         Scanner keyboard;
-
-        System.out.println("Connect to server " + HOST + ":" + INIT_PORT);
+        System.out.println("Welcome to Hangman Game");
+        System.out.println("Connect to server " + HOST + " : " + INIT_PORT);
         try {
             // init socket with init port
             socket = new Socket(HOST, INIT_PORT);
@@ -80,7 +80,7 @@ public class Client {
             // get new port to change connection
             socketInput = new ObjectInputStream(socket.getInputStream());
             String newPort = (String) socketInput.readObject();
-            System.out.println("new Port: " + newPort);
+            System.out.println("New Port : " + newPort);
             keyboard = new Scanner(System.in);
 
             //// switch to new port
@@ -95,11 +95,11 @@ public class Client {
 
 
                 // print game status
-                System.out.println("-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-\n");
-                System.out.println("You have " + (MAX_TRY - miss_chance) + " turns left.");
-                System.out.println("Word:\t" + hidden_word);
-                System.out.println("Misses: " + missed);
-                System.out.print("\nGuess: ");
+                System.out.println("\n");
+                System.out.println("Letter :\t" + hidden_letter);
+                System.out.println("Wrong X : " + missed);
+                System.out.println("\nYou have " + (MAX_LIFE - miss_chance) + " life point");
+                System.out.print("Answer : ");
 
                 // send user input
                 sendUserInput(keyboard.nextLine());
@@ -108,17 +108,19 @@ public class Client {
                 getStatus();
             }
 
-            System.out.println("-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-");
+            System.out.println("\n");
 
             if (isWin==1){
-                System.out.println( "Yeah! you Win" );
-                System.out.println( "The word was..." + hidden_word );
+                System.out.println("You have " + (MAX_LIFE - miss_chance) + " life point");
+                System.out.println( "Godlike, Pro is here" );
+                System.out.println( "Answer : " + hidden_letter );
 
             }
             else if (isLose ==1) {
                 String answer = getAnswer();
-                System.out.println("Noooooob guy!!");
-                System.out.println("The word was..." + answer);
+                System.out.println("You have " + (MAX_LIFE - miss_chance) + " life point");
+                System.out.println("kids, Loser on this game");
+                System.out.println("Answer : " + answer);
             }
 
             // send "exit" for tell server thead to close socket

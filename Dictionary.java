@@ -7,16 +7,16 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Scanner;
 
-public class MultiThreadRespond implements Runnable{
+public class Dictionary implements Runnable{
 
     private ServerSocket server;
     private int port ;
     private ObjectOutputStream socketOutput;
     private ObjectInputStream socketInput;
 
-    private int MAX_TRY = 7;
+    private int MAX_LIFE = 7;
 
-    public MultiThreadRespond(int port){
+    public Dictionary(int port){
         this.port = port;
         try{
             server = new ServerSocket(port);
@@ -28,24 +28,27 @@ public class MultiThreadRespond implements Runnable{
 
     @Override
     public void run(){
-        String  [] Word = { "Harrypotter","Friendzone","Spiderman","Alita",
-                "Frozen","Batman","Deadpool","Sinderella", "Avatar",
-                "Titanic","Avengers","Incredibles","Minions", "Aquaman ",
-                "Transformers","Skyfall","Zootopia", "Jumanji"};
-        String rand_word;
+        String  [] Letter = { "southafrica","newzealand","iceland",
+                            "namibia","ecuador","vietnam",
+                            "australia","netherlands","taiwan",
+                            "germany","ethiopia","brazil",
+                            "tenn","scotland","alberta",
+                            "japan","kenya","indonesia",
+                            "thailand","england","dubai"};
+        String rLetter;
         char[] hidden_word;
         String user_guess = "";
         int miss_chance = 0;
         char[] missed = new char[7];
         boolean letter_found = false, solved = false;
-        rand_word = Word[ (int)(Math.random() * Word.length) ].toLowerCase();
-        hidden_word = new char[rand_word.length()];
+        rLetter = Letter[ (int)(Math.random() * Letter.length) ].toLowerCase();
+        hidden_word = new char[rLetter.length()];
 
         int isWin = 0;
         int isLose = 0;
 
-        for (int i = 0; i < rand_word.length(); i++) {
-            if (rand_word.charAt(i) == ' ') {
+        for (int i = 0; i < rLetter.length(); i++) {
+            if (rLetter.charAt(i) == ' ') {
                 hidden_word[i] = ' ';
             } else {
                 hidden_word[i] = '_';
@@ -59,7 +62,8 @@ public class MultiThreadRespond implements Runnable{
 
         ////   hidden_word|miss_count|missed|isWin|isLose
 
-        System.out.println("Start Games : " + rand_word);
+        System.out.println("Letter is " + rLetter);
+        System.out.println("Letter length : "+ hidden_word.length);
         while(true){
             try{
                 Socket socket = server.accept();
@@ -68,14 +72,14 @@ public class MultiThreadRespond implements Runnable{
                 boolean running = true;
                 while (running){
 
-
-                    System.out.print("\nHidden Word: ");
+                    
+                    System.out.print("Hidden Letter : ");
                     res_hidden_word.delete(0,  res_hidden_word.length());
-                    for (int i = 0; i < rand_word.length(); i++) {
+                    for (int i = 0; i < rLetter.length(); i++) {
                         System.out.print(hidden_word[i] + " ");
                         res_hidden_word.append(hidden_word[i]).append(" ");
                     }
-                    System.out.print("\nMisses: ");
+                    System.out.print("\nWrong X : ");
                     res_missed.delete(0,  res_missed.length());
                     for (int i = 0; i < missed.length; i++) {
                         System.out.print(missed[i]);
@@ -92,7 +96,7 @@ public class MultiThreadRespond implements Runnable{
                         socketOutput.writeObject(res_hidden_word + "@" + res_miss_count + "@" + res_missed + "@" + isWin + "@" + isLose );
 
                     }else if (action.equals("getAnswer") && isLose == 1) {
-                        socketOutput.writeObject(rand_word);
+                        socketOutput.writeObject(rLetter);
                     }else if (action.equals("exit")) {
                         socketOutput.close();
                         socketInput.close();
@@ -104,9 +108,9 @@ public class MultiThreadRespond implements Runnable{
 
                         /// Game Logical
                         letter_found = false;
-                        for (int i = 0; i < rand_word.length(); i++) {
-                            if (user_guess.toLowerCase().charAt(0) == rand_word.toLowerCase().charAt(i)) {
-                                hidden_word[i] = rand_word.charAt(i);
+                        for (int i = 0; i < rLetter.length(); i++) {
+                            if (user_guess.toLowerCase().charAt(0) == rLetter.toLowerCase().charAt(i)) {
+                                hidden_word[i] = rLetter.charAt(i);
                                 letter_found = true;
                             }
                         }
@@ -115,7 +119,7 @@ public class MultiThreadRespond implements Runnable{
                             miss_chance++;
                         }
                         int hidden_count = 0;
-                        for (int i = 0; i < rand_word.length(); i++) {
+                        for (int i = 0; i < rLetter.length(); i++) {
                             if ('_' == hidden_word[i])
                                 hidden_count++;
                         }
@@ -127,7 +131,7 @@ public class MultiThreadRespond implements Runnable{
                     }
 
                     /// check win or lose
-                    if (miss_chance >= MAX_TRY){
+                    if (miss_chance >= MAX_LIFE){
                         isLose = 1;
 
                     }
