@@ -1,0 +1,7 @@
+"harry potter","fantastic beasts","spider man",
+"jurassic park","fast and furious","the avengers",
+"toy story","the hunger games","avatar",
+"Transformers","iron man","step up",
+"the lion king","beauty and the beast","star wars+",
+"guardians of the galaxy","black panther","alita",
+"captain marvel","aquaman","superman"
