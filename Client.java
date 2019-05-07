@@ -1,4 +1,10 @@
+package com.techprimers.docker.dockerspringboot.resource;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
 import javax.swing.plaf.synth.SynthTextAreaUI;
+import java.util.NoSuchElementException;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -6,6 +12,9 @@ import java.io.ObjectOutputStream;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.util.Scanner;
+
+@RestController
+@RequestMapping ("rest/docker/client")
 public class Client {
 
     private static int MAX_LIFE = 7;
@@ -65,7 +74,7 @@ public class Client {
             e.printStackTrace();
         }
     }
-
+    @GetMapping
     public static void main( String[] args ) {
         Scanner keyboard;
         System.out.println("Welcome to Hangman Game");
