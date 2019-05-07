@@ -1,5 +1,3 @@
-package com.techprimers.docker.dockerspringboot.resource;
-
 
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -30,13 +28,13 @@ public class Dictionary implements Runnable{
 
     @Override
     public void run(){
-        String  [] Letter = { "southafrica","newzealand","iceland",
-                            "namibia","ecuador","vietnam",
-                            "australia","netherlands","taiwan",
-                            "germany","ethiopia","brazil",
-                            "tenn","scotland","alberta",
-                            "japan","kenya","indonesia",
-                            "thailand","england","dubai"};
+        String  [] Letter = { "harry potter","fantastic beasts","spider man",
+                              "jurassic park","fast and furious","the avengers",
+                              "toy story","the hunger games","avatar",
+                              "Transformers","iron man","step up",
+                              "the lion king","beauty and the beast","star wars+",
+                              "guardians of the galaxy","black panther","alita",
+                              "captain marvel","aquaman","superman"};
         String rLetter;
         char[] hidden_word;
         String user_guess = "";
@@ -87,13 +85,9 @@ public class Dictionary implements Runnable{
                         System.out.print(missed[i]);
                         res_missed.append(missed[i]).append(" ");
                     }
-
-
-                    /// check action which Clint do
                     String action =  (String) socketInput.readObject();
                     System.out.println(action);
                     if (action.equals("start") || action.equals("getStatus")){
-                        /// response games status
                         res_miss_count = miss_chance;
                         socketOutput.writeObject(res_hidden_word + "@" + res_miss_count + "@" + res_missed + "@" + isWin + "@" + isLose );
 
@@ -104,11 +98,8 @@ public class Dictionary implements Runnable{
                         socketInput.close();
                         socket.close();
                     }else if (action.substring(0,5).equals("send:")){
-                        /// get Client input
                         user_guess = action.substring(5,6);
                         System.out.print("\nGuess: " + user_guess);
-
-                        /// Game Logical
                         letter_found = false;
                         for (int i = 0; i < rLetter.length(); i++) {
                             if (user_guess.toLowerCase().charAt(0) == rLetter.toLowerCase().charAt(i)) {
@@ -132,7 +123,6 @@ public class Dictionary implements Runnable{
                         }
                     }
 
-                    /// check win or lose
                     if (miss_chance >= MAX_LIFE){
                         isLose = 1;
 
@@ -141,9 +131,6 @@ public class Dictionary implements Runnable{
                         isWin = 1;
                     }
                 }
-
-
-
 
             }catch(Exception e){
                 System.out.println(e);

@@ -1,10 +1,4 @@
-package com.techprimers.docker.dockerspringboot.resource;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
 import javax.swing.plaf.synth.SynthTextAreaUI;
-import java.util.NoSuchElementException;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -12,9 +6,6 @@ import java.io.ObjectOutputStream;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.util.Scanner;
-
-@RestController
-@RequestMapping ("rest/docker/client")
 public class Client {
 
     private static int MAX_LIFE = 7;
@@ -74,46 +65,39 @@ public class Client {
             e.printStackTrace();
         }
     }
-    @GetMapping
+
     public static void main( String[] args ) {
         Scanner keyboard;
         System.out.println("Welcome to Hangman Game");
         System.out.println("Connect to server " + HOST + " : " + INIT_PORT);
         try {
-            // init socket with init port
-            socket = new Socket(HOST, INIT_PORT);
-            // send "start" to get new port
+
+            socket = new Socket("server", INIT_PORT);
             socketOutput = new ObjectOutputStream(socket.getOutputStream());
             socketOutput.writeObject("start");
 
-            // get new port to change connection
+
             socketInput = new ObjectInputStream(socket.getInputStream());
             String newPort = (String) socketInput.readObject();
             System.out.println("New Port : " + newPort);
             keyboard = new Scanner(System.in);
 
-            //// switch to new port
-            socket = new Socket(HOST, Integer.parseInt(newPort));
+
+            socket = new Socket("server", Integer.parseInt(newPort));
             socketOutput = new ObjectOutputStream(socket.getOutputStream());
             socketInput = new ObjectInputStream(socket.getInputStream());
 
-            // get initial game status
             getStatus();
-
             while (isWin == 0 && isLose ==0) {
 
-
-                // print game status
                 System.out.println("\n");
                 System.out.println("Letter :\t" + hidden_letter);
                 System.out.println("Wrong X : " + missed);
                 System.out.println("\nYou have " + (MAX_LIFE - miss_chance) + " life point");
                 System.out.print("Answer : ");
 
-                // send user input
+     
                 sendUserInput(keyboard.nextLine());
-
-                // get new game status
                 getStatus();
             }
 
@@ -132,10 +116,9 @@ public class Client {
                 System.out.println("Answer : " + answer);
             }
 
-            // send "exit" for tell server thead to close socket
             socketOutput.writeObject("exit");
 
-            // close socket
+
             socketOutput.close();
             socketInput.close();
             socket.close();

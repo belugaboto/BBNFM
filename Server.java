@@ -1,7 +1,3 @@
-package com.techprimers.docker.dockerspringboot.resource;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -13,17 +9,15 @@ import java.net.Socket;
 import java.util.Random;
 import java.util.Scanner;
 
-@RestController
-@RequestMapping ("rest/docker/server")
+
 public class Server {
 
 
     private static ServerSocket server;
-
     private static int port = 8888;
-    @GetMapping
-    public static void main(String args[]) throws ClassNotFoundException {
 
+    public static void main(String args[]) throws ClassNotFoundException {
+        
         int i =0;
         Thread thread = null;
         try {
